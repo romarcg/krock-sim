@@ -1,0 +1,27 @@
+version: '3'
+services:
+ krock-sim:
+  command: bash
+  image: krock-sim
+  #stdin_open: true
+  #tty: true
+  volumes:
+    - ./catkin_ws_src:/root/catkin_ws/src:rw
+    - ./krock:/root/krock:rw
+    - "tmp:/tmp:rw"
+    - /etc/group:/etc/group:ro
+    - /etc/passwd:/etc/passwd:ro
+    - /etc/shadow:/etc/shadow:ro
+    # - /etc/sudoers.d:/etc/sudoers.d:ro
+    - /tmp/.X11-unix:/tmp/.X11-unix:rw
+  environment:
+    - "DISPLAY"
+    - "QT_X11_NO_MITSHM=1"
+  #devices:
+    #- /dev/input/js0
+  build:
+    dockerfile: docker/Dockerfile
+    context: .
+
+volumes:
+  tmp:
