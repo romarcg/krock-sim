@@ -1,5 +1,5 @@
 services:
-  webots:
+  krock-sim:
     build:
       context: .
       dockerfile: docker/Dockerfile
@@ -12,7 +12,7 @@ services:
     environment:
     - DISPLAY
     - QT_X11_NO_MITSHM=1
-    image: webots
+    image: krock-sim
     volumes:
     - ./catkin_ws_src:/root/catkin_ws/src:rw
     - ./krock:/root/krock:rw
