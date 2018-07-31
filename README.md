@@ -14,9 +14,15 @@ Code and files to simulate *krock* robot in webots simulator. The goal is to per
 
 ## How to krock
 
+> **Note:** if installing docker or nvidia-docker (1.0 version, or a version that supports opengl libs to run webots) is not possible refer to the file `README-non-docker.md`. 
+
 ### Installation
 
-Follow the steps on the github repository to compile the docker image. Remember to dowloand the webots binary.
+Follow the steps on the github repository to compile the docker image. Remember to dowloand the *webots* binary.
+
+> **Before** running the container you must have intalled nvidia gpu drivers for your card, `nvidia-docker` (tested with version 1.0) and `nvidia-docker-compose`.
+
+> In case an nvidia gpu is not present in your system you **must** adapt the `Dockerfile` by removing the nvidia lines and adding an alternative (e.g. intel based gpu). A gpu is needed to execute the webots simulator in the container.
 
 ### General description of the current architecture
 
@@ -30,21 +36,21 @@ Ideally, the simulator will only run the simulated robot (sic) in a desired map.
 
 ### webots
 
-Once inside the container, run the simulator using `webots`. Enter your credentials.
-Open (`File > Open World`) the test world `krock2.wbt` in `~/krock/krock2_ros/worlds`. This world file includes instructions to load the map (store as a matrix inside such file) and the robot model (which also calls the krock2_ros controller).
+Once inside the container, run the simulator using `webots` command in a terminal. Enter your credentials.
+Open (`File > Open World`) the test world `krock2.wbt` in `~/krock/krock2_ros/worlds`. This world file includes instructions to load the map (stored as a matrix inside such file) and the robot model (which also calls the `krock2_ros` controller).
 
 > Ideally, this process needs to be automatized so that a roslaunch can call for the simulator to open different maps (previously generated).
 
 
 ### ROS side
 
-When launching webots as described in the last section an error will appear indicating that a connection to ROS master was not found. This is due to the roscore not initialized.
+When launching *webots* as described in the last section an error will appear indicating that a connection to ROS master was not found. This is due to the roscore not initialized.
 
-In another terminal (inside the container) execute `roscore`. Then in webots interface restart the simulation (Ctrl + Shift + r). The error will disappear and the controller (from webots side) is ready to receive commands and publish topics with robot state information.
+In another terminal (inside the container) execute `roscore`. Then in *webots* interface restart the simulation (`Ctrl + Shift + r`). The error will disappear and the controller (from *webots* side) is ready to receive commands and publish topics with robot state information.
 
-In another terminal (inside the container) execute `rostopic list` for a quick overview of the current available topics (published by the krock2_ros webots controller).
+In another terminal (inside the container) execute `rostopic list` for a quick overview of the current available topics (published by the `krock2_ros` *webots* controller).
 
-Currently, I have implemented to ways to interface with the robot, the simplest one is using the `/krock/gait_chooser` topic with 0 -- 3 value. Another one is using the `/joy` topic that ideally needs a joystick to control the robot. The former option only chooses the gait and moves forward, the latter will allow to increase speed and also make turns.
+Currently, I have implemented to ways to interface with the robot, the simplest one is using the `/krock/gait_chooser` topic with `0` -- `3` value. Another one is using the `/joy` topic that ideally needs a joystick to control the robot. The former option only chooses the gait and moves forward, the latter will allow to increase speed and also make turns.
 
 Using `/kgrock/gait_chooser`:
 
@@ -58,11 +64,11 @@ rostopic pub /krock/gait_chooser webots_ros/Int8Stamped "header:
 data: 1"
 ```
 
-A very simple python script in `simulate_traversability` package is present to give an idea on how to read data from webots simulator.
+A very simple python script in `simulate_traversability` package is present to give an idea on how to read data from *webots* simulator.
 
 This ROS side also needs to be automatized. Ideally, it must:
 
-i. launch the webots simulatore with a desired world and spawn the robot at a random pose,
+i. launch the *webots* simulatore with a desired world and spawn the robot at a random pose,
 ii. send a movement command (e.g. move forward at certain speed),
 iii. record the movement (pose, torques feedback and touch sensors) published by the controller,
 iv. once a certain period of time has passed (e.g. 20s) store all the data (e.g. a rosbag)
