@@ -69,6 +69,7 @@ class RosKrock : public Ros {
     ros::Subscriber kSpawnPoseSubscriber;
     ros::Subscriber kKeyboardKeySubscriber;
     ros::Subscriber kJoySubscriber;
+    ros::Subscriber kMessageManualControlSubscriber;
 
     //ros::ServiceServer kSpawnPoseSubscriber;
 
@@ -76,8 +77,9 @@ class RosKrock : public Ros {
     void setGaitCallback(const webots_ros::Int8Stamped::ConstPtr& msg);
     void setSpawnPoseCallback(const geometry_msgs::PoseStamped::ConstPtr& msg);
     //bool setSpawnPoseService(const geometry_msgs::PoseStamped::ConstPtr& msg);
-    void manualControlCallback(const webots_ros::Int32Stamped::ConstPtr& msg);
+    void keyboardManualControlCallback(const webots_ros::Int32Stamped::ConstPtr& msg);
     void joyControlCallback(const sensor_msgs::Joy::ConstPtr& msg);
+    void messageManualControlCallback(const webots_ros::Float64ArrayStamped::ConstPtr& msg);
 
     bool selectGait(int index);
 
@@ -218,7 +220,7 @@ bool RosKrock::setSpawnPoseService(const geometry_msgs::PoseStamped::ConstPtr& m
 }
 */
 
-void RosKrock::manualControlCallback(const webots_ros::Int32Stamped::ConstPtr& msg){
+void RosKrock::keyboardManualControlCallback(const webots_ros::Int32Stamped::ConstPtr& msg){
     ROS_INFO("From keyboard: %d", msg->data);
     int key = msg->data;
     float offset = 0.5;
@@ -278,6 +280,31 @@ void RosKrock::joyControlCallback(const sensor_msgs::Joy::ConstPtr& msg){
     }
 }
 
+void RosKrock::messageManualControlCallback(const webots_ros::Float64ArrayStamped::ConstPtr& msg){
+    /*Do we really need the Stamp? Left for future uses.*/
+    std::vector<double> inputs (msg->data);
+    if (inputs.size() == 4){
+        ROS_INFO("Manually setting control inputs (mode, gait, frontal freq, lateral freq ):");
+        controller_mode = int(inputs[0]) %2 ;
+        int new_gait_idx = int(inputs[1]) % 4;
+        selectGait(new_gait_idx);
+        float ff, fl;
+        fl = (inputs[2]>1.0) ? 1.0 : inputs[2];
+        fl = (inputs[2]<-1.0) ? -1.0 : inputs[2];
+        ff = (inputs[3]>1.0) ? 1.0 : inputs[3];
+        ff = (inputs[3]<-1.0) ? -1.0 : inputs[3];
+        
+        freq_left = (freq_offset * fl) - (freq_offset * ff);
+        freq_right = (freq_offset * fl) + (freq_offset * ff);
+        
+        ROS_INFO("Control inputs (%d, %d, %f, %f). Frequency of table reading for legs L %f R %f.", controller_mode, new_gait_idx, ff, fl, freq_left, freq_right);
+    }
+    else{
+        ROS_INFO("WARNING: 4 values expected, ignoring control commands.");
+    }
+    
+}
+
 void RosKrock::setupRobot(){
     wb_robot_init();
     mRobot = new RobotSim(TIME_STEP);
@@ -321,8 +348,9 @@ void RosKrock::launchRos(int argc, char **argv){
     // our subscribers
     kGaitChooserSubscriber = nodeHandle()->subscribe("/krock/gait_chooser",10, &RosKrock::setGaitCallback, this);
     kSpawnPoseSubscriber = nodeHandle()->subscribe("/krock/spawn_pose",10, &RosKrock::setSpawnPoseCallback, this);
-    kKeyboardKeySubscriber = nodeHandle()->subscribe("/krock/keyboard/key",10, &RosKrock::manualControlCallback, this);
+    kKeyboardKeySubscriber = nodeHandle()->subscribe("/krock/keyboard/key",10, &RosKrock::keyboardManualControlCallback, this);
     kJoySubscriber = nodeHandle()->subscribe("/joy",10, &RosKrock::joyControlCallback, this);
+    kMessageManualControlSubscriber = nodeHandle()->subscribe("/krock/manual_control_input",10, &RosKrock::messageManualControlCallback, this);
 
     // our publishers
     kPosePublisher = nodeHandle()->advertise<geometry_msgs::PoseStamped>(name()+"/pose", 1);

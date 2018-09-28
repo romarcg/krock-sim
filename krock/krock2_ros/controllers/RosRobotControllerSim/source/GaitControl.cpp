@@ -77,7 +77,7 @@ GaitControl :: runStep(const double freq_left, const double freq_right)
 
     index_tail = (index_left < index_right)? index_left: index_right;
 
-    cout << "L: ("<< freq_left <<")= " << index_left << " R("<< freq_right << ")= " << index_right << endl;
+    //cout << "L: ("<< freq_left <<")= " << index_left << " R("<< freq_right << ")= " << index_right << endl;
 
 }
 
