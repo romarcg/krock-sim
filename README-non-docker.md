@@ -32,7 +32,7 @@ In another terminal execute `roscore`. Then in webots interface restart the simu
 
 In another terminal execute `rostopic list` for a quick overview of the current available topics (published by the `krock2_ros` `webots` controller).
 
-Currently, I have implemented to ways to interface with the robot, the simplest one is using the `/krock/gait_chooser` topic with `0`-- `3` value. Another one is using the `/joy` topic that ideally needs a joystick to control the robot. The former option only chooses the gait and moves forward, the latter will allow to increase speed and also make turns. Even if joystick is not present, `rostopic pub` can be used to send similar commands.
+Currently, I have implemented three ways to interface with the robot, the simplest one is using the `/krock/gait_chooser` topic with `0`-- `3` value. Another one is using the `/joy` topic that ideally needs a joystick to control the robot. The former option only chooses the gait and moves forward, the latter will allow to increase speed and also make turns. Even if joystick is not present, `rostopic pub` can be used to send similar commands.
 
 Using `/kgrock/gait_chooser`:
 
@@ -46,13 +46,31 @@ rostopic pub /krock/gait_chooser webots_ros/Int8Stamped "header:
 data: 1"
 ```
 
+A third way to control the robot is though a one show message send to to the topic `/krock/manual_control_input`. Such message is composed of four numbers (mode, gait, frontal freq, lateral freq), the first one chooses the mode (`1, 0`), the second the gait (`0, 1, 2, 3`) and the third and four are floats (`[-1.0, 1.0]`) to indicate the frequency of reading the joint tables on the specific table gait. These frequency numbers act as speed controllers, frontal freq for full forward `(1.0)` or full backwards `(-1.0)` and the lateral freq for rotations.
+
+This example sets the manual mode using the normal gait at "full" forward speed:
+
+```
+rostopic pub /krock/manual_control_input webots_ros/Float64ArrayStamped "header: 
+  seq: 0
+  stamp:
+    secs: 0
+    nsecs: 0
+  frame_id: ''
+data:
+- 1
+- 1
+- 1.0
+- 0.0" 
+```
+
 A very simple python script in `simulate_traversability` package is present to give an idea on how to read data from webots simulator. This script can be executed using `rosrun` tool. 
 
 > Remember to build the packages `simulated_traversability` and `webots_ros` and **source** the result so to be able to execute the script (which must be executable via chmod).
 
 This ROS side also needs to be automatized. Ideally, it must:
 
-i. launch the webots simulatore with a desired world and spawn the robot at a random pose,
+i. launch the webots simulator with a desired world and spawn the robot at a random pose,
 ii. send a movement command (e.g. move forward at certain speed),
 iii. record the movement (pose, torques feedback and touch sensors) published by the controller,
 iv. once a certain period of time has passed (e.g. 20s) store all the data (e.g. a rosbag)
