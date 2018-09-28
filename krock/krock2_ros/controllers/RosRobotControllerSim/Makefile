@@ -31,7 +31,7 @@ WEBOTS_HOME_PATH=$(subst $(space),\ ,$(strip $(subst \,/,$(WEBOTS_HOME))))
 SERVICE_FILES = $(wildcard include/srv/*.srv)
 SERVICE_HEADERS = $(SERVICE_FILES:include/srv/%.srv=include/webots_ros/%.h)
 
-CXX_SOURCES = source/robotSim.cpp main.cpp source/controller.cpp
+CXX_SOURCES = source/robotSim.cpp main.cpp source/GaitControl.cpp
 
 #CXX_SOURCES += $(wildcard *.cpp)
 CXX_SOURCES += $(wildcard $(WEBOTS_HOME_PATH)/projects/default/controllers/ros/Ros*.cpp)
