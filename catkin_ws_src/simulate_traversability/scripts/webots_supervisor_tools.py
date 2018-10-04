@@ -120,8 +120,8 @@ class ServiceTools:
                 # remember that the rotation in webots is different from
                 # rotation in ROS. Webots x,y,z is in m and w is in rad
                 # (yaw)
-                new_orientation.x = 1.0
-                new_orientation.y = 0.0
+                new_orientation.x = 0.0
+                new_orientation.y = 1.0
                 new_orientation.z = 0.0
                 new_orientation.w = 0.1
 
