@@ -20,10 +20,6 @@ services:
     - /etc/group:/etc/group:ro
     - /etc/passwd:/etc/passwd:ro
     - /etc/shadow:/etc/shadow:ro
-<<<<<<< HEAD
-    - /etc/sudoers.d:/etc/sudoers.d:ro
-=======
->>>>>>> e027c40a68187c99799d2820d53fa75e0ffa69ba
     - /tmp/.X11-unix:/tmp/.X11-unix:rw
     - nvidia_driver_390.87:/usr/local/nvidia:ro
 version: '3'
