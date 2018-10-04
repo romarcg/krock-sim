@@ -24,6 +24,7 @@
 #include "webots_ros/Float64ArrayStamped.h"
 
 #include "Ros.hpp"
+#include "RosSupervisor.hpp"
 
 #include <std_msgs/Header.h>
 #include <geometry_msgs/PoseStamped.h>
@@ -58,6 +59,7 @@ class RosKrock : public Ros {
   private :
     // very useful static cast to later on use methods from class RobotSim
     RobotSim * robotSim() { return static_cast<RobotSim *>(mRobot); }
+    RosSupervisor           *mRosSupervisor;
 
     // ROS subscribers/publishers
     ros::Publisher kPosePublisher;
@@ -133,10 +135,6 @@ RosKrock::~RosKrock(){
     delete mRobot;
 }
 
-
-
-
-
 void RosKrock::setGaitCallback(const webots_ros::Int8Stamped::ConstPtr& msg){
     //ROS_INFO ("New gait option received: %d", msg->data);
     int new_gait_idx = msg->data;
@@ -165,7 +163,7 @@ bool RosKrock::selectGait(int new_gait_idx){
 
 void RosKrock::setSpawnPoseCallback(const geometry_msgs::PoseStamped::ConstPtr& msg){
     ROS_INFO ("New spawn pose received: ");
-
+    
     Node *node_robot = robotSim()->getFromDef("ROBOT");
 
     Field* translationField;
@@ -184,7 +182,7 @@ void RosKrock::setSpawnPoseCallback(const geometry_msgs::PoseStamped::ConstPtr& 
     // SUPERVISOR_NEEDED?
     //
     // get the robot node to set the translantion and rotation
-    // is it possible to do it without the superviosr capabilities?
+    // is it possible to do it without the superviosr capabilities? NO
 
     translationField->setSFVec3f(translationValues);
     orientationField->setSFRotation(orientationValues);
@@ -293,23 +291,24 @@ void RosKrock::messageManualControlCallback(const webots_ros::Float64ArrayStampe
         fl = (inputs[2]<-1.0) ? -1.0 : inputs[2];
         ff = (inputs[3]>1.0) ? 1.0 : inputs[3];
         ff = (inputs[3]<-1.0) ? -1.0 : inputs[3];
-        
+
         freq_left = (freq_offset * fl) - (freq_offset * ff);
         freq_right = (freq_offset * fl) + (freq_offset * ff);
-        
+
         ROS_INFO("Control inputs (%d, %d, %f, %f). Frequency of table reading for legs L %f R %f.", controller_mode, new_gait_idx, ff, fl, freq_left, freq_right);
     }
     else{
         ROS_INFO("WARNING: 4 values expected, ignoring control commands.");
     }
-    
+
 }
 
 void RosKrock::setupRobot(){
     wb_robot_init();
-    mRobot = new RobotSim(TIME_STEP);
+    mRobot = new RobotSim(TIME_STEP);    
     if (mRobot->getType() == Node::SUPERVISOR){
-        cout << "This robot is a supervisor" << endl;
+        cout << "::This robot is a supervisor" << endl;
+        //mRosSupervisor = new RosSupervisor(this, static_cast<RobotSim *>(mRobot));
     }
     cout<<"RobotSIM CREATED"<<endl;
     controller = new GaitControl(FREQUENCY, gait_files[current_gait_idx]);
@@ -458,13 +457,18 @@ int RosKrock::step(int duration){
         Field* orientationField;
         pose_krock.header.frame_id= "world";
         pose_krock.header.stamp = ros::Time::now();//
-
+        
+        // Webots frame of reference is different from ROS' 
+        // webots: x forward, z right, y upward
+        
         translationField = node_robot->getField("translation");
         const double* translationValues = translationField->getSFVec3f();
         pose_krock.pose.position.x = translationValues[0];
-        pose_krock.pose.position.y = translationValues[1];
-        pose_krock.pose.position.z = translationValues[2];
+        pose_krock.pose.position.y = translationValues[2];
+        pose_krock.pose.position.z = translationValues[1];
 
+        // Orientation in webots is also diffferent:
+        // x,y,z  are in m and tw is aan angle in rad equivalent to yaw
         orientationField = node_robot->getField("rotation");
         const double* orientationValues = orientationField->getSFRotation();
         pose_krock.pose.orientation.x = orientationValues[0];

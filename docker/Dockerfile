@@ -14,12 +14,13 @@ CMD source /opt/ros/kinetic/setup.bash
 ##
 RUN apt-get -y update && apt-get install -y libarmadillo-dev curl git python-catkin-tools dbus python-pip gfortran nano packagekit-gtk3-module libcanberra-gtk-module gedit eog gdebi nautilus python-pip python-dev build-essential libpulse-mainloop-glib0
 
+RUN apt-get -y update && apt-get install -y gdb htop
 ##
 # webots and other tools and sources
 
 COPY src /root/src
 
-RUN apt-get -y update && yes | gdebi /root/src/webots_2018a-rev2_amd64_p.deb
+RUN apt-get -y update && yes | gdebi /root/src/webots_2018b_amd64.deb
 
 ##
 # For gpu usage (specially nvidia gpu).
