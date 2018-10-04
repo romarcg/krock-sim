@@ -123,7 +123,11 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
+<<<<<<< HEAD
   #include
+=======
+# include
+>>>>>>> e027c40a68187c99799d2820d53fa75e0ffa69ba
   ${catkin_INCLUDE_DIRS}
 )
 
