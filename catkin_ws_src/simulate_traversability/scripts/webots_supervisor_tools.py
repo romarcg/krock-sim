@@ -133,6 +133,19 @@ class ServiceTools:
         except rospy.ServiceException, e:
             print ("Service call failed: ", e)
 
+    def enable_front_camera(self):
+        # this is a serivce call that will enable the camera at the fron
+        # of the robot. Once it is enabled, the webots controller will
+        # publish the image data in /self.model_name/front_camera/image
+        service = self.model_name+'/front_camera/enable'
+        rospy.loginfo("Waiting for service %s", service)
+        rospy.wait_for_service(service)
+        try:
+            request_enable = rospy.ServiceProxy(service, set_int)
+            answer = request_enable(1) # use 0 for disabling
+            print (answer)
+        except rospy.ServiceException, e:
+            print ("Service call failed: ", e)
 
 if __name__ == "__main__":
     model_name = "krock"
@@ -155,3 +168,5 @@ if __name__ == "__main__":
     # and set field values
     tools.set_robot_position()
     tools.set_robot_orientation()
+
+    tools.enable_front_camera()

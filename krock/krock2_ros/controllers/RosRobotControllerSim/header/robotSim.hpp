@@ -2,11 +2,13 @@
 #define ROBOTSIM_HPP
 
 #include <iostream>
+#include <cstring>
 
 #include <vector>
 #include <webots/Supervisor.hpp>
 #include <webots/Accelerometer.hpp>
 #include <webots/Compass.hpp>
+#include <webots/Camera.hpp>
 #include <webots/GPS.hpp>
 #include <webots/Motor.hpp>
 #include <webots/TouchSensor.hpp>
@@ -43,7 +45,7 @@ class RobotSim : public webots::Supervisor{
     double t_total;
 
     webots::Node *supportPolyDEF;
-    
+
     //================== public functions ===============================================
     RobotSim(int TIME_STEP); // constructor
     void setAngles(double*);
@@ -52,6 +54,9 @@ class RobotSim : public webots::Supervisor{
     void GetPosition(double *gpsData1, double *gpsData2);
     void GetIMU(double *imuData_i);
     void ReadTouchSensors(double *ts_data);
+    //void getCameraImage(unsigned char *image);
+    //int getCameraWidth();
+    //int getCameraHeight();
     void killSimulation();
     void setPositionRotation(double *p, double *r);
     void setPositionOfRobot(double *p);

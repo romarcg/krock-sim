@@ -1,11 +1,6 @@
-
 #include "robotSim.hpp"
 
-
-
 extern double get_timestamp();
-
-
 
 /* RobotSim constructor */
 RobotSim :: RobotSim(int TIME_STEP)
@@ -20,11 +15,9 @@ RobotSim :: RobotSim(int TIME_STEP)
     imu = new webots::InertialUnit("IMU");
     imu->enable(TIME_STEP);
 
-
     gpsDataFgird=gps_fgird->getValues();
     gpsDataHgird=gps_hgird->getValues();
     imuData = imu->getRollPitchYaw();
-
 
     //
     // SUPERVISOR_NEEDED?
@@ -57,14 +50,10 @@ RobotSim :: RobotSim(int TIME_STEP)
         "neck1_sensor", "tail1_sensor", "tail2_sensor"
     };
 
-
-
     const char *TOUCH_SENSOR_NAMES[N_TOUCH_SENSORS] =
     {
     "fl_touch", "fr_touch", "hl_touch", "hr_touch",
     };
-
-
 
     rm_motor.resize(NUM_MOTORS);
     ps_motor.resize(NUM_MOTORS);
@@ -80,10 +69,6 @@ RobotSim :: RobotSim(int TIME_STEP)
     }
     cout << "motors collected" << endl;
 
-
-
-
-
     for(int i=0;i<N_TOUCH_SENSORS;i++){
         touch_sensor[i] = new webots::TouchSensor(TOUCH_SENSOR_NAMES[i]);
         touch_sensor[i]->enable(TIME_STEP);
@@ -94,6 +79,9 @@ RobotSim :: RobotSim(int TIME_STEP)
     tsdefHL=getFromDef("TS_HL");
     tsdefHR=getFromDef("TS_HR");
 
+    // Enable Camera
+    camera = new webots::Camera("front_camera");
+    camera->enable(TIME_STEP);
 
 }
 
@@ -116,11 +104,6 @@ RobotSim :: torques(double *table, int *ids)
             }
         }
 }
-
-
-
-
-
 
 /* Reads positions, torques   */
 void
@@ -157,8 +140,6 @@ RobotSim::GetIMU(double *imuData_i)
 }
 
 
-
-
 /* Reads touch sensor data */
 void
 RobotSim::ReadTouchSensors(double *ts_data)
@@ -192,6 +173,25 @@ RobotSim::ReadTouchSensors(double *ts_data)
     ts_data[2+9]=ts_hr[1];
 }
 
+/* Get camera image*/
+// Theses functions are not needed because webot ROS controller exposes
+// the image as a topic
+
+/*
+int RobotSim::getCameraWidth(){
+  return camera->getWidth();
+}
+
+int RobotSim::getCameraHeight(){
+  return camera->getHeight();
+}
+
+void RobotSim::getCameraImage(unsigned char *image){
+  const unsigned char *tmp;
+  tmp = camera->getImage();
+  memcpy(image, tmp, (camera->getWidth())*(camera->getHeight())*4);
+}
+*/
 
 /* Quits simulation */
 void

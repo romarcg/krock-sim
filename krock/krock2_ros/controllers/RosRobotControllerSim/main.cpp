@@ -24,15 +24,16 @@
 #include "webots_ros/Float64ArrayStamped.h"
 
 #include "Ros.hpp"
-<<<<<<< HEAD
 #include "RosSupervisor.hpp"
-=======
->>>>>>> e027c40a68187c99799d2820d53fa75e0ffa69ba
 
 #include <std_msgs/Header.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <sensor_msgs/Joy.h>
+#include <sensor_msgs/Imu.h>
 
+//#include <image_transport/image_transport.h>
+//#include <cv_bridge/cv_bridge.h>
+//#include <sensor_msgs/image_encodings.h>
 
 
 #define TIME_STEP   10    //ms
@@ -62,16 +63,15 @@ class RosKrock : public Ros {
   private :
     // very useful static cast to later on use methods from class RobotSim
     RobotSim * robotSim() { return static_cast<RobotSim *>(mRobot); }
-<<<<<<< HEAD
-    RosSupervisor           *mRosSupervisor;
-=======
->>>>>>> e027c40a68187c99799d2820d53fa75e0ffa69ba
+    //RosSupervisor           *mRosSupervisor;
 
     // ROS subscribers/publishers
     ros::Publisher kPosePublisher;
     //ros::Publisher kPosePublisherGPS;
     ros::Publisher kTorquesFeedbackPublisher;
     ros::Publisher kTouchSensorsPublisher;
+    // very limited IMU
+    ros::Publisher kIMUPublisher;
 
     ros::Subscriber kGaitChooserSubscriber;
     ros::Subscriber kSpawnPoseSubscriber;
@@ -79,12 +79,13 @@ class RosKrock : public Ros {
     ros::Subscriber kJoySubscriber;
     ros::Subscriber kMessageManualControlSubscriber;
 
-    //ros::ServiceServer kSpawnPoseSubscriber;
+    // for camera, it sufies with enable it in the RobotSim (supervisor based)
+    // and declare it in the device list. Webots must recognise it as image
+    // (part of a ROS controller) and expose it as a ROS topic
 
     // ROS callbacks
     void setGaitCallback(const webots_ros::Int8Stamped::ConstPtr& msg);
     void setSpawnPoseCallback(const geometry_msgs::PoseStamped::ConstPtr& msg);
-    //bool setSpawnPoseService(const geometry_msgs::PoseStamped::ConstPtr& msg);
     void keyboardManualControlCallback(const webots_ros::Int32Stamped::ConstPtr& msg);
     void joyControlCallback(const sensor_msgs::Joy::ConstPtr& msg);
     void messageManualControlCallback(const webots_ros::Float64ArrayStamped::ConstPtr& msg);
@@ -103,6 +104,7 @@ class RosKrock : public Ros {
             gpsDataFront[3],
             gpsDataHind[3],
             feetTouchSensors[12]; // 3D force sensor readings from eahc foot
+    unsigned char * currentImage;
     const double freq_offset;
     char *gait_files[4];
     int current_gait_idx;
@@ -110,6 +112,8 @@ class RosKrock : public Ros {
     ofstream rpyLog;
     ofstream anglesLog;
     ofstream torquesLog;
+    // enable logging in file?
+    bool log_mode;
 
 };
 
@@ -125,8 +129,7 @@ RosKrock::RosKrock() :
     t = 0.;
     dt = TIME_STEP/1000.; // no idea why they do that instead of using TIME_STEP, ask Tomislav
 
-    //gait_files =
-
+    log_mode = false;
     gpsLog.open("./logData/gpsLog.txt");
     rpyLog.open("./logData/rpyLog.txt");
     anglesLog.open("./logData/anglesLog.txt");
@@ -137,17 +140,15 @@ RosKrock::RosKrock() :
 RosKrock::~RosKrock(){
     wb_robot_cleanup();
     kPosePublisher.shutdown();
+    kIMUPublisher.shutdown();
+    kTouchSensorsPublisher.shutdown();
+    delete currentImage;
+
     ros::shutdown();
+
     delete mRobot;
 }
 
-<<<<<<< HEAD
-=======
-
-
-
-
->>>>>>> e027c40a68187c99799d2820d53fa75e0ffa69ba
 void RosKrock::setGaitCallback(const webots_ros::Int8Stamped::ConstPtr& msg){
     //ROS_INFO ("New gait option received: %d", msg->data);
     int new_gait_idx = msg->data;
@@ -176,11 +177,7 @@ bool RosKrock::selectGait(int new_gait_idx){
 
 void RosKrock::setSpawnPoseCallback(const geometry_msgs::PoseStamped::ConstPtr& msg){
     ROS_INFO ("New spawn pose received: ");
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> e027c40a68187c99799d2820d53fa75e0ffa69ba
     Node *node_robot = robotSim()->getFromDef("ROBOT");
 
     Field* translationField;
@@ -193,51 +190,16 @@ void RosKrock::setSpawnPoseCallback(const geometry_msgs::PoseStamped::ConstPtr& 
     const double orientationValues [4]= {msg->pose.orientation.x,msg->pose.orientation.y,msg->pose.orientation.z,msg->pose.orientation.w};
 
     ROS_INFO ("New spawn pose received. T [%f,%f,%f] R [%f,%f,%f,%f]",translationValues[0],translationValues[1],translationValues[2],orientationValues [0],orientationValues [1],orientationValues [2],orientationValues [3]);
-
 
     //
     // SUPERVISOR_NEEDED?
     //
     // get the robot node to set the translantion and rotation
-<<<<<<< HEAD
     // is it possible to do it without the superviosr capabilities? NO
-=======
-    // is it possible to do it without the superviosr capabilities?
->>>>>>> e027c40a68187c99799d2820d53fa75e0ffa69ba
-
     translationField->setSFVec3f(translationValues);
     orientationField->setSFRotation(orientationValues);
 
 }
-
-//
-// How do we declare a service in webots_ros to spanw our robot
-// instead of using a topic callback?
-//
-
-/*
-bool RosKrock::setSpawnPoseService(const geometry_msgs::PoseStamped::ConstPtr& msg){
-    ROS_INFO ("New spawn pose received: ");
-
-    Node *node_robot = robotSim()->getFromDef("ROBOT");
-
-    Field* translationField;
-    Field* orientationField;
-
-    translationField = node_robot->getField("translation");
-    orientationField = node_robot->getField("rotation");
-
-    const double translationValues [3]= {msg->pose.position.x,msg->pose.position.y,msg->pose.position.z};
-    const double orientationValues [4]= {msg->pose.orientation.x,msg->pose.orientation.y,msg->pose.orientation.z,msg->pose.orientation.w};
-
-    ROS_INFO ("New spawn pose received. T [%f,%f,%f] R [%f,%f,%f,%f]",translationValues[0],translationValues[1],translationValues[2],orientationValues [0],orientationValues [1],orientationValues [2],orientationValues [3]);
-
-    translationField->setSFVec3f(translationValues);
-    orientationField->setSFRotation(orientationValues);
-
-    return true;
-}
-*/
 
 void RosKrock::keyboardManualControlCallback(const webots_ros::Int32Stamped::ConstPtr& msg){
     ROS_INFO("From keyboard: %d", msg->data);
@@ -312,41 +274,24 @@ void RosKrock::messageManualControlCallback(const webots_ros::Float64ArrayStampe
         fl = (inputs[2]<-1.0) ? -1.0 : inputs[2];
         ff = (inputs[3]>1.0) ? 1.0 : inputs[3];
         ff = (inputs[3]<-1.0) ? -1.0 : inputs[3];
-<<<<<<< HEAD
 
         freq_left = (freq_offset * fl) - (freq_offset * ff);
         freq_right = (freq_offset * fl) + (freq_offset * ff);
 
-=======
-        
-        freq_left = (freq_offset * fl) - (freq_offset * ff);
-        freq_right = (freq_offset * fl) + (freq_offset * ff);
-        
->>>>>>> e027c40a68187c99799d2820d53fa75e0ffa69ba
         ROS_INFO("Control inputs (%d, %d, %f, %f). Frequency of table reading for legs L %f R %f.", controller_mode, new_gait_idx, ff, fl, freq_left, freq_right);
     }
     else{
         ROS_INFO("WARNING: 4 values expected, ignoring control commands.");
     }
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> e027c40a68187c99799d2820d53fa75e0ffa69ba
 }
 
 void RosKrock::setupRobot(){
     wb_robot_init();
-<<<<<<< HEAD
-    mRobot = new RobotSim(TIME_STEP);    
-    if (mRobot->getType() == Node::SUPERVISOR){
-        cout << "::This robot is a supervisor" << endl;
-        //mRosSupervisor = new RosSupervisor(this, static_cast<RobotSim *>(mRobot));
-=======
+
     mRobot = new RobotSim(TIME_STEP);
     if (mRobot->getType() == Node::SUPERVISOR){
-        cout << "This robot is a supervisor" << endl;
->>>>>>> e027c40a68187c99799d2820d53fa75e0ffa69ba
+        cout << "::This robot is a supervisor" << endl;
     }
     cout<<"RobotSIM CREATED"<<endl;
     controller = new GaitControl(FREQUENCY, gait_files[current_gait_idx]);
@@ -354,7 +299,7 @@ void RosKrock::setupRobot(){
 
 void RosKrock::setRosDevices(const char **hiddenDevices, int numberHiddenDevices){
 
-    const char * krock_devices[46] = {
+    const char * krock_devices[47] = {
         "FLpitch_motor", "FLyaw_motor", "FLroll_motor", "FLknee_motor",
         "FRpitch_motor", "FRyaw_motor", "FRroll_motor", "FRknee_motor",
         "HLpitch_motor", "HLyaw_motor", "HLroll_motor", "HLknee_motor",
@@ -367,7 +312,7 @@ void RosKrock::setRosDevices(const char **hiddenDevices, int numberHiddenDevices
         "HRpitch_sensor", "HRyaw_sensor", "HRroll_sensor", "HRknee_sensor",
         "spine1_sensor", "spine2_sensor",
         "neck1_sensor", "tail1_sensor", "tail2_sensor",
-        "fl_touch", "fr_touch", "hl_touch", "hr_touch",
+        "fl_touch", "fr_touch", "hl_touch", "hr_touch", "front_camera",
     };
 
     Ros::setRosDevices(krock_devices, 46);
@@ -394,20 +339,12 @@ void RosKrock::launchRos(int argc, char **argv){
     //kPosePublisherGPS = nodeHandle()->advertise<geometry_msgs::PoseStamped>(name()+"/pose_gps", 1);
     kTorquesFeedbackPublisher = nodeHandle()->advertise<webots_ros::Float64ArrayStamped>(name()+"/torques_feedback", 1);
     kTouchSensorsPublisher = nodeHandle()->advertise<webots_ros::Float64ArrayStamped>(name()+"/touch_sensors", 1);
-
-    // Services
-    //
-    // HOW TO DECLARE A SERVICE? Look in the manual/API
-    //
-
-    //kSpawnPoseSubscriber = nodeHandle()->advertiseService("spawn_krock", &RosKrock::setSpawnPoseService);
-
+    // As there is no much information from the simulated IMU (and maybe from the real one), only use an array to share the change in rollPitchYaw (not even covariance)
+    kIMUPublisher = nodeHandle()->advertise<webots_ros::Float64ArrayStamped>(name()+"/imu", 1);
 
 }
 
-
 int RosKrock::step(int duration){
-
     //ROS_INFO ("Running step func with duration %d", duration);
 
     // controller calls
@@ -436,45 +373,56 @@ int RosKrock::step(int duration){
 
     // NOTE: This is the way the native robot controllers retrieves data of pose, joints, torques
 
-    // gpsDataFront stores the same information as the data in transition,rotation fields of the node ROBOT.
-    //cout << "Front position(x,y,z): " << gpsDataFront[0] << gpsDataFront[1] << gpsDataFront[2] << endl;
-    //cout << "Orientation(roll, pitch, yaw): " << rollPitchYaw[0] << rollPitchYaw[1] << rollPitchYaw[2] << endl;
-
     std::vector<double> tmp_torques;
     std::vector<double> tmp_touchs;
+    std::vector<double> tmp_imu;
 
     // LOG DATA
-    gpsLog << t << "\t";
-    for(int i=0; i<3; i++){
-        gpsLog << gpsDataFront[i] << "\t";
-    }
-    gpsLog << endl;
+    if (log_mode){
+      gpsLog << t << "\t";
+      for(int i=0; i<3; i++){
+          gpsLog << gpsDataFront[i] << "\t";
+      }
+      gpsLog << endl;
 
-    rpyLog << t << "\t";
-    for(int i=0; i<3; i++){
-        rpyLog << rollPitchYaw[i] << "\t";
-    }
-    rpyLog << endl;
+      rpyLog << t << "\t";
+      for(int i=0; i<3; i++){
+          rpyLog << rollPitchYaw[i] << "\t";
+      }
+      rpyLog << endl;
 
-    anglesLog << t << "\t";
-    for(int i=0; i<NUM_MOTORS; i++){
-        anglesLog << feedbackAngles[i] << "\t";
-    }
-    anglesLog << endl;
+      anglesLog << t << "\t";
+      for(int i=0; i<NUM_MOTORS; i++){
+          anglesLog << feedbackAngles[i] << "\t";
+      }
+      anglesLog << endl;
 
+      torquesLog << t << "\t";
+      for(int i=0; i<NUM_MOTORS; i++){
+          torquesLog << feedbackTorques[i] << "\t";
+      }
+      torquesLog << endl;
+
+    }
+
+    // get data from robot sim object
     // torques
-    torquesLog << t << "\t";
     for(int i=0; i<NUM_MOTORS; i++){
         tmp_torques.push_back(feedbackTorques[i]);
-        torquesLog << feedbackTorques[i] << "\t";
     }
-    torquesLog << endl;
 
     // touch sensors (3D force readings per foot)
     for(int i=0; i<12; i++){
         tmp_touchs.push_back(feetTouchSensors[i]);
     }
 
+    // imu
+    for(int i=0; i<3; i++){
+        tmp_imu.push_back(rollPitchYaw[i]);
+    }
+
+    // camera
+    // automatically exposed as a part of webots ROS controller device
 
     // NOTE: This is the way to extract pose information from webots API (compared with way above)
 
@@ -484,9 +432,9 @@ int RosKrock::step(int duration){
     Node *node_robot = robotSim()->getFromDef("ROBOT");
     geometry_msgs::PoseStamped pose_krock;// = new geometry_msgs::PoseStamped();
     //double stime = robotSim()->getTime();
-
     webots_ros::Float64ArrayStamped torques_krock;
     webots_ros::Float64ArrayStamped touch_sensors_krock;
+    webots_ros::Float64ArrayStamped imu_krock;
 
 
     if (node_robot){
@@ -495,11 +443,9 @@ int RosKrock::step(int duration){
         Field* orientationField;
         pose_krock.header.frame_id= "world";
         pose_krock.header.stamp = ros::Time::now();//
-<<<<<<< HEAD
-        
-        // Webots frame of reference is different from ROS' 
+
+        // Webots frame of reference is different from ROS'
         // webots: x forward, z right, y upward
-        
         translationField = node_robot->getField("translation");
         const double* translationValues = translationField->getSFVec3f();
         pose_krock.pose.position.x = translationValues[0];
@@ -508,15 +454,6 @@ int RosKrock::step(int duration){
 
         // Orientation in webots is also diffferent:
         // x,y,z  are in m and tw is aan angle in rad equivalent to yaw
-=======
-
-        translationField = node_robot->getField("translation");
-        const double* translationValues = translationField->getSFVec3f();
-        pose_krock.pose.position.x = translationValues[0];
-        pose_krock.pose.position.y = translationValues[1];
-        pose_krock.pose.position.z = translationValues[2];
-
->>>>>>> e027c40a68187c99799d2820d53fa75e0ffa69ba
         orientationField = node_robot->getField("rotation");
         const double* orientationValues = orientationField->getSFRotation();
         pose_krock.pose.orientation.x = orientationValues[0];
@@ -538,9 +475,16 @@ int RosKrock::step(int duration){
 
         touch_sensors_krock.data = tmp_touchs;
 
+        // Populating IMU message
+        // It seems there is not covariance available. As the data is limited, use Array64 instead of Imu message
+        imu_krock.header.frame_id = "krock";
+        imu_krock.header.stamp = ros::Time::now();
+        imu_krock.data = tmp_imu;
+
         kPosePublisher.publish(pose_krock);
         kTorquesFeedbackPublisher.publish(torques_krock);
         kTouchSensorsPublisher.publish(touch_sensors_krock);
+        kIMUPublisher.publish(imu_krock);
 
     }
 

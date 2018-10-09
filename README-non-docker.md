@@ -16,7 +16,7 @@ If a non-docker setup is preferred or inevitable the current state of the reposi
 
 ### Webots
 
-Run the simulator using `webots` in a terminal. Enter your credentials. Open (`File > Open World`) the test world `krock2.wbt` in `~/krock/krock2_ros/worlds`. This world file includes instructions to load the map (stored as a matrix inside such file) and the robot model (which also calls the krock2_ros controller).
+Run the simulator using `webots` in a terminal. Enter your credentials. Open (`File > Open World`) the test world `krock2_camera.wbt` in `~/krock/krock2_ros/worlds`. This world file includes instructions to load the map (stored as a matrix inside such file) and the robot model (which also calls the krock2_ros controller).
 
 > Ideally, this process needs to be automatized so that a `roslaunch` can call for the simulator to open different maps (previously generated).
 
@@ -51,7 +51,7 @@ A third way to control the robot is though a one show message send to to the top
 This example sets the manual mode using the normal gait at "full" forward speed:
 
 ```
-rostopic pub /krock/manual_control_input webots_ros/Float64ArrayStamped "header: 
+rostopic pub /krock/manual_control_input webots_ros/Float64ArrayStamped "header:
   seq: 0
   stamp:
     secs: 0
@@ -61,12 +61,14 @@ data:
 - 1
 - 1
 - 1.0
-- 0.0" 
+- 0.0"
 ```
 
-A very simple python script in `simulate_traversability` package is present to give an idea on how to read data from webots simulator. This script can be executed using `rosrun` tool. 
+A very simple python script in `simulate_traversability` package is present to give an idea on how to read data from webots simulator. This script can be executed using `rosrun` tool.
 
-> Remember to build the packages `simulated_traversability` and `webots_ros` and **source** the result so to be able to execute the script (which must be executable via chmod).
+> A ros node called webots_supervisor_tools.py` in the ros package `simulate_traversability` shows how to access the set of ros services exposed by the webots controller. Use this node as a base to interface with the krock robot. For example, to activate the front camera of the robot, a service must be called. Such service will start publishing the camera image in the respective topic.
+
+> Remember to build the packages `simulate_traversability` and `webots_ros`. **source** the result so to be able to execute the script (which must be executable via chmod).
 
 This ROS side also needs to be automatized. Ideally, it must:
 
@@ -75,4 +77,3 @@ ii. send a movement command (e.g. move forward at certain speed),
 iii. record the movement (pose, torques feedback and touch sensors) published by the controller,
 iv. once a certain period of time has passed (e.g. 20s) store all the data (e.g. a rosbag)
 v. respawm the robot on another random pose and repeat from ii. This could also be changed to be a single run experiment (the simplest the better)
-

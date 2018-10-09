@@ -23,6 +23,10 @@ COPY src /root/src
 
 RUN apt-get -y update && yes | gdebi /root/src/webots_2018b_amd64.deb
 
+# extra packages, move to a single step (some instructions above) once this container
+# is ready
+RUN apt-get -y update && apt-get install -y ros-kinetic-cv-bridge ros-kinetic-cv-camera libopencv-dev
+
 ##
 # For gpu usage (specially nvidia gpu).
 ##
