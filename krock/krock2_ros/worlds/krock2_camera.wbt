@@ -26,8 +26,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.7910285760627126 0.5493553797209769 0.2692256648683749 5.4875586552181455
-  position -5.70709654637818 10.31484232252694 12.889962920178412
+  orientation 0.9539526052438722 0.27399859043491903 0.12206227667918794 5.652347564585425
+  position -2.433262170027493 8.72724802620767 12.743500710446458
 }
 Background {
   skyColor [
@@ -247,8 +247,8 @@ DEF Cameras_T Transform {
   ]
 }
 DEF ROBOT Supervisor {
-  translation -0.10561704932755216 0.2732234651277961 0.013781858880013938
-  rotation -0.11334535944990937 0.9583357520886916 0.2621934700936934 -0.2715324798272836
+  translation 1.7748796544942484 0.26157738880141523 0.7219529449135657
+  rotation -0.045851748524618485 0.9988984810457093 0.009972047022042964 -0.27066738698355874
   children [
     DEF Head_T Transform {
       translation 0.14 0 0
@@ -264,8 +264,8 @@ DEF ROBOT Supervisor {
                   rotation 0 1 0 3.14
                   name "front_camera"
                   fieldOfView 1.047
-                  width 800
-                  height 600
+                  width 640
+                  height 480
                 }
                 USE Cameras_Shape
               ]
@@ -328,7 +328,7 @@ DEF ROBOT Supervisor {
       children [
         DEF SPINE1_HJ HingeJoint {
           jointParameters HingeJointParameters {
-            position -6.262354440406638e-8
+            position 0.029998494303890275
             axis 0 1 0
           }
           device [
@@ -340,7 +340,7 @@ DEF ROBOT Supervisor {
             }
           ]
           endPoint Solid {
-            rotation 0 -1 0 5.960464477539063e-8
+            rotation 0 1 0 0.029998494303891572
             children [
               Transform {
               }
@@ -349,7 +349,7 @@ DEF ROBOT Supervisor {
                 children [
                   DEF SPINE2_HJ HingeJoint {
                     jointParameters HingeJointParameters {
-                      position 6.070348002548631e-7
+                      position -0.09337372601097177
                       axis 0 1 0
                     }
                     device [
@@ -361,7 +361,7 @@ DEF ROBOT Supervisor {
                       }
                     ]
                     endPoint Solid {
-                      rotation 0 1 0 6.07119464500649e-7
+                      rotation 0 -1 0 0.09337372601097177
                       children [
                         DEF Tail1MX Transform {
                           translation -0.175 0 -2.58924e-9
@@ -375,7 +375,7 @@ DEF ROBOT Supervisor {
                           children [
                             HingeJoint {
                               jointParameters HingeJointParameters {
-                                position -3.2967612125887416e-7
+                                position -6.903719187781805e-7
                                 axis 0 1 0
                               }
                               device [
@@ -387,27 +387,27 @@ DEF ROBOT Supervisor {
                                 }
                               ]
                               endPoint Solid {
-                                rotation 0 -1 0 3.2917740992269735e-7
+                                rotation 0 -1 0 6.906169787798241e-7
                                 children [
                                   DEF TAIL_Passive1 Transform {
                                     translation -0.08 0 0
                                     children [
                                       HingeJoint {
                                         jointParameters HingeJointParameters {
-                                          position 1.3050992433532878
+                                          position 0.546889834869593
                                           axis 0 0 1
                                           dampingConstant 0.05
                                           suspensionAxis 0 0 1
                                         }
                                         endPoint Solid {
-                                          rotation 0 0 1 1.3050992433532875
+                                          rotation 0 0 1 0.5468898348695933
                                           children [
                                             DEF TAIL2_T Transform {
                                               translation -0.07 0 0
                                               children [
                                                 HingeJoint {
                                                   jointParameters HingeJointParameters {
-                                                    position -2.1896541558412382e-7
+                                                    position -5.248026822608912e-7
                                                     axis 0 1 0
                                                   }
                                                   device [
@@ -419,7 +419,7 @@ DEF ROBOT Supervisor {
                                                     }
                                                   ]
                                                   endPoint Solid {
-                                                    rotation 0 -1 0 2.1900144899933154e-7
+                                                    rotation 0 -1 0 5.247240323322731e-7
                                                     children [
                                                       DEF Fin_Transform Transform {
                                                         translation -0.07 0 -5.5203565e-7
@@ -447,8 +447,8 @@ DEF ROBOT Supervisor {
                                                         -0.22 0 0
                                                       ]
                                                     }
-                                                    linearVelocity -2.0823864778338752e-5 6.339625498084089e-6 6.911702508380913e-6
-                                                    angularVelocity 5.468588915398519e-5 4.698143502120716e-5 -9.98512939783206e-5
+                                                    linearVelocity 0.05406679096486154 -0.022957137906197116 0.21404308536754546
+                                                    angularVelocity 0.14851175608776937 0.4169954718438114 -0.09078152523523644
                                                   }
                                                 }
                                               ]
@@ -476,8 +476,8 @@ DEF ROBOT Supervisor {
                                               -0.05 0 0
                                             ]
                                           }
-                                          linearVelocity 2.953867217341938e-6 -2.650591438868588e-6 1.5689760006655826e-5
-                                          angularVelocity 5.4688652668710834e-5 4.69807082554311e-5 -9.985061722943522e-5
+                                          linearVelocity 0.09401558071579635 -0.05076846658318044 0.1516518774093313
+                                          angularVelocity 0.14851177180858943 0.41699542028940495 -0.09078149284024241
                                         }
                                       }
                                     ]
@@ -506,8 +506,8 @@ DEF ROBOT Supervisor {
                                     -0.06 0 0
                                   ]
                                 }
-                                linearVelocity 8.149153261817797e-6 -4.51426351723956e-6 1.6606684140602493e-5
-                                angularVelocity 2.5956141035149935e-5 4.462024321474295e-5 7.67695349468545e-6
+                                linearVelocity 0.10507471396506654 -0.05340823417679672 0.13083250659878312
+                                angularVelocity 0.05250448883523799 0.41368076438274404 0.18522966654190157
                               }
                             }
                           ]
@@ -517,7 +517,7 @@ DEF ROBOT Supervisor {
                           children [
                             DEF HLpitch_HJ HingeJoint {
                               jointParameters HingeJointParameters {
-                                position 2.342550939949067e-6
+                                position 0.1374720857014649
                               }
                               device [
                                 RotationalMotor {
@@ -528,11 +528,11 @@ DEF ROBOT Supervisor {
                                 }
                               ]
                               endPoint Solid {
-                                rotation 0.9999999999999999 0 0 2.34247012294885e-6
+                                rotation 1 0 0 0.1374720857014635
                                 children [
                                   DEF HLyaw_HJ HingeJoint {
                                     jointParameters HingeJointParameters {
-                                      position 7.155065717615671e-7
+                                      position -0.43842923094515857
                                       axis 0 1 0
                                     }
                                     device [
@@ -544,14 +544,14 @@ DEF ROBOT Supervisor {
                                       }
                                     ]
                                     endPoint Solid {
-                                      rotation 0 1 0 7.152557373046913e-7
+                                      rotation 0 -1 0 0.4384292309451582
                                       children [
                                         DEF HLroll_T Transform {
                                           translation 0 0 -0.1474
                                           children [
                                             DEF HLroll_HJ HingeJoint {
                                               jointParameters HingeJointParameters {
-                                                position 1.570799391902025
+                                                position 1.355854835395511
                                                 axis 0 0 1
                                               }
                                               device [
@@ -563,12 +563,12 @@ DEF ROBOT Supervisor {
                                                 }
                                               ]
                                               endPoint Solid {
-                                                translation 1.0634235927541902e-23 -3.469449999983704e-18 0
-                                                rotation 0 0 1 1.5707993919020253
+                                                translation -7.399999148100005e-19 -3.3896140530422028e-18 0
+                                                rotation 0 0 1 1.3558548353955109
                                                 children [
                                                   DEF HLknee_HJ HingeJoint {
                                                     jointParameters HingeJointParameters {
-                                                      position -1.6457778038617775e-7
+                                                      position -0.11099908679610306
                                                       axis 0 1 0
                                                     }
                                                     device [
@@ -580,14 +580,14 @@ DEF ROBOT Supervisor {
                                                       }
                                                     ]
                                                     endPoint Solid {
-                                                      rotation 0 -0.9999999999999999 0 1.632340423778195e-7
+                                                      rotation 0 -1 0 0.1109990867961031
                                                       children [
                                                         DEF HL_TOUCH_T Transform {
                                                           translation -0.12 0 0
                                                           children [
                                                             DEF TS_HL TouchSensor {
-                                                              translation 3.5914492569344425e-6 1.0158152649597518e-6 -2.7299666249813725e-7
-                                                              rotation 0.13501802705304003 -0.6720552342413468 -0.7280878343301123 6.468266026963649e-10
+                                                              translation 1.3183245856140946e-5 6.509606526705625e-6 -2.519269634571053e-6
+                                                              rotation -0.25276074826803846 -0.17179571677846314 -0.9521545230851741 3.222961069084865e-8
                                                               children [
                                                                 DEF TS_SHAPE Shape {
                                                                   appearance Appearance {
@@ -615,8 +615,8 @@ DEF ROBOT Supervisor {
                                                               }
                                                               type "force-3d"
                                                               lookupTable []
-                                                              linearVelocity 9.444017941007132e-7 2.051392193384849e-6 2.523371861684609e-6
-                                                              angularVelocity 2.593885167059249e-5 4.461636139419707e-5 7.679655191334845e-6
+                                                              linearVelocity -0.00033938599595644686 0.00020194880926510672 -0.0027653877002925403
+                                                              angularVelocity -0.1547927234409498 0.6997552323965107 0.03273899001482041
                                                             }
                                                           ]
                                                         }
@@ -657,8 +657,8 @@ DEF ROBOT Supervisor {
                                                           -0.07 0 0
                                                         ]
                                                       }
-                                                      linearVelocity 6.423642482454198e-7 2.039665645831659e-6 3.6570170141452644e-6
-                                                      angularVelocity 2.593897122967782e-5 4.461637691972503e-5 7.679595321066429e-6
+                                                      linearVelocity 0.010855652058254332 0.0030678307452395317 -0.011086199689757773
+                                                      angularVelocity -0.15479282548602255 0.6997552415529382 0.03273903002211852
                                                     }
                                                   }
                                                   DEF HindLeftKneeMX Transform {
@@ -685,8 +685,8 @@ DEF ROBOT Supervisor {
                                                     0 0 0
                                                   ]
                                                 }
-                                                linearVelocity 2.2253928722540887e-7 2.0175801919555055e-6 5.248693778515258e-6
-                                                angularVelocity 2.5941175994093598e-5 4.4616287326976354e-5 7.678687964436727e-6
+                                                linearVelocity 0.02652740111740041 0.0070797387913519826 -0.02273920138429667
+                                                angularVelocity 0.009460108185009706 0.6355666014699652 0.18270019001883114
                                               }
                                             }
                                           ]
@@ -733,8 +733,8 @@ DEF ROBOT Supervisor {
                                           0 0 -0.08
                                         ]
                                       }
-                                      linearVelocity 3.1304701566703394e-6 2.0930701971894653e-7 5.976397321111235e-6
-                                      angularVelocity 2.5942888807702808e-5 4.4616263147135065e-5 7.676958229824731e-6
+                                      linearVelocity 0.058393283722585794 -0.0019399127543390886 0.006998773270072845
+                                      angularVelocity -0.006904217875695948 0.632463505616166 0.19929066665570708
                                     }
                                   }
                                   DEF HindLeftYawMX Transform {
@@ -760,8 +760,8 @@ DEF ROBOT Supervisor {
                                     0 0 0
                                   ]
                                 }
-                                linearVelocity 6.583438569535599e-6 -1.9396591733244452e-6 6.842277805435636e-6
-                                angularVelocity 2.5946373442371304e-5 4.461715145875185e-5 7.676414436351318e-6
+                                linearVelocity 0.09621529108347843 -0.01264592383265663 0.04229459028980677
+                                angularVelocity 0.0027403141974843455 0.41396652904744197 0.16793312242986508
                               }
                             }
                           ]
@@ -771,7 +771,7 @@ DEF ROBOT Supervisor {
                           children [
                             DEF HRpitch_HJ HingeJoint {
                               jointParameters HingeJointParameters {
-                                position 3.4794665473574613e-7
+                                position 0.11416884350018504
                               }
                               device [
                                 RotationalMotor {
@@ -782,11 +782,11 @@ DEF ROBOT Supervisor {
                                 }
                               ]
                               endPoint Solid {
-                                rotation 1 0 0 3.4755181639464544e-7
+                                rotation 1 0 0 0.11416884350018683
                                 children [
                                   DEF HRyaw_HJ HingeJoint {
                                     jointParameters HingeJointParameters {
-                                      position 6.911443068696981e-8
+                                      position -0.3900411099617601
                                       axis 0 1 0
                                     }
                                     device [
@@ -798,14 +798,14 @@ DEF ROBOT Supervisor {
                                       }
                                     ]
                                     endPoint Solid {
-                                      rotation 0 1 0 6.664001874625056e-8
+                                      rotation 0 -1 0 0.3900411099617596
                                       children [
                                         DEF HRroll_T Transform {
                                           translation 0 0 0.1474
                                           children [
                                             DEF HRroll_HJ HingeJoint {
                                               jointParameters HingeJointParameters {
-                                                position 1.5708000005969573
+                                                position 1.0581448875099022
                                                 axis 0 0 1
                                               }
                                               device [
@@ -817,12 +817,12 @@ DEF ROBOT Supervisor {
                                                 }
                                               ]
                                               endPoint Solid {
-                                                translation 1.2746072559032248e-23 -3.4694499999765865e-18 0
-                                                rotation 0 0 1 1.5708000005969571
+                                                translation -1.7017289944742324e-18 -3.0234420338193513e-18 0
+                                                rotation 0 0 1 1.0581448875099024
                                                 children [
                                                   DEF HRknee_HJ HingeJoint {
                                                     jointParameters HingeJointParameters {
-                                                      position 1.704126288355642e-10
+                                                      position 0.6801728701167364
                                                       axis 0 1 0
                                                     }
                                                     device [
@@ -834,13 +834,14 @@ DEF ROBOT Supervisor {
                                                       }
                                                     ]
                                                     endPoint Solid {
+                                                      rotation 0 1 0 0.6801728701167361
                                                       children [
                                                         DEF HR_TOUCH_T Transform {
                                                           translation -0.12 0 0
                                                           children [
                                                             DEF TS_HR TouchSensor {
-                                                              translation -3.853737134962287e-9 -2.2594721094115755e-9 7.824407788348253e-12
-                                                              rotation -0.2620899431996243 0.06552248579990608 0.9628165274486198 1.9062172130000165e-15
+                                                              translation 4.633654176244839e-6 4.489187452882959e-7 -3.5597442904489185e-7
+                                                              rotation -0.06534492118146697 0.6529779991887278 0.7545526978622988 -1.3884984922529146e-8
                                                               children [
                                                                 DEF TS_SHAPE Shape {
                                                                   appearance Appearance {
@@ -862,8 +863,8 @@ DEF ROBOT Supervisor {
                                                               }
                                                               type "force-3d"
                                                               lookupTable []
-                                                              linearVelocity 2.162204705107717e-5 -1.076558959908075e-5 7.710838726389816e-6
-                                                              angularVelocity 2.606920619267229e-5 4.5547181870861886e-5 7.728153345215353e-6
+                                                              linearVelocity 0.11323118620384787 -0.01233095406358787 0.07456304100826001
+                                                              angularVelocity -0.2500989175945596 0.11696887088139286 -0.3670551163000296
                                                             }
                                                           ]
                                                         }
@@ -904,8 +905,8 @@ DEF ROBOT Supervisor {
                                                           -0.07 0 0
                                                         ]
                                                       }
-                                                      linearVelocity 2.1326994912205856e-5 -1.0791581767963662e-5 8.859325708308634e-6
-                                                      angularVelocity 2.6069206191123397e-5 4.5547181870660536e-5 7.728153350926199e-6
+                                                      linearVelocity 0.12574430795621153 -0.026407850146830496 0.061547844793362255
+                                                      angularVelocity -0.25009890904605714 0.11696886299058044 -0.367055126987099
                                                     }
                                                   }
                                                   DEF HindRightKneeMX Transform {
@@ -932,8 +933,8 @@ DEF ROBOT Supervisor {
                                                     0 0 0
                                                   ]
                                                 }
-                                                linearVelocity 2.0913928619233075e-5 -1.0827971745073219e-5 1.0467208789206442e-5
-                                                angularVelocity 2.606920641348986e-5 4.554718184699899e-5 7.728153863258881e-6
+                                                linearVelocity 0.14326411948369355 -0.04611876225912504 0.043325586162121774
+                                                angularVelocity 0.16575247084794445 -0.21248166303725083 -0.04790041855832907
                                               }
                                             }
                                           ]
@@ -980,8 +981,8 @@ DEF ROBOT Supervisor {
                                           0 0 0.08
                                         ]
                                       }
-                                      linearVelocity 1.7937849975429813e-5 -8.996415741131649e-6 9.712068378126264e-6
-                                      angularVelocity 2.6069206455925747e-5 4.554718198916377e-5 7.728154144431626e-6
+                                      linearVelocity 0.1542646617752413 -0.03995290431020652 0.054051699544871365
+                                      angularVelocity 0.0396094913385267 -0.23426128277010544 0.09398524080571875
                                     }
                                   }
                                   DEF HindRightYawMX Transform {
@@ -1007,8 +1008,8 @@ DEF ROBOT Supervisor {
                                     0 0 0
                                   ]
                                 }
-                                linearVelocity 1.4405457226382073e-5 -6.822463779512222e-6 8.815769373940594e-6
-                                angularVelocity 2.6007124367410373e-5 4.4614195077056136e-5 7.691089642334842e-6
+                                linearVelocity 0.16732136066302256 -0.032634857927696895 0.06678313025669831
+                                angularVelocity 0.016024060637290068 0.4139020398412387 0.1725108521155719
                               }
                             }
                           ]
@@ -1072,8 +1073,8 @@ DEF ROBOT Supervisor {
                           -0.05 0 0
                         ]
                       }
-                      linearVelocity 1.0489555547087099e-5 -4.374050679536217e-6 7.827816521499616e-6
-                      angularVelocity 2.5958989399425833e-5 4.4617926696072014e-5 7.67830833811169e-6
+                      linearVelocity 0.13175614548413098 -0.02265374411153088 0.05458062634390416
+                      angularVelocity 0.05250452178076987 0.4136805763139604 0.18522970083870097
                     }
                   }
                 ]
@@ -1101,8 +1102,8 @@ DEF ROBOT Supervisor {
                 -0.12 0 0
               ]
             }
-            linearVelocity 1.2594607858862644e-5 -4.234013671072685e-6 -1.0797125176769263e-7
-            angularVelocity 2.5965994555960614e-5 4.46122262581048e-5 7.68000976752671e-6
+            linearVelocity 0.14045444118186534 0.005799960335573314 0.027840054870123716
+            angularVelocity 0.052010682226821106 0.05854333749148875 0.18078428983414385
           }
         }
       ]
@@ -1112,7 +1113,7 @@ DEF ROBOT Supervisor {
       children [
         DEF FLpitch_HJ HingeJoint {
           jointParameters HingeJointParameters {
-            position -1.9458921649631351e-7
+            position 0.2363214939737791
           }
           device [
             RotationalMotor {
@@ -1123,11 +1124,11 @@ DEF ROBOT Supervisor {
             }
           ]
           endPoint Solid {
-            rotation -1 0 0 1.954268969387413e-7
+            rotation 0.9999999999999999 0 0 0.23632149397377988
             children [
               DEF FLyaw_HJ HingeJoint {
                 jointParameters HingeJointParameters {
-                  position -8.762486050059985e-8
+                  position 0.7579259629753196
                   axis 0 1 0
                 }
                 device [
@@ -1139,14 +1140,14 @@ DEF ROBOT Supervisor {
                   }
                 ]
                 endPoint Solid {
-                  rotation 0 -1 0 8.940696716308595e-8
+                  rotation 0 1 0 0.7579259629753197
                   children [
                     DEF FLroll_T Transform {
                       translation 0 0 -0.1474
                       children [
                         DEF FLroll_HJ HingeJoint {
                           jointParameters HingeJointParameters {
-                            position -1.5707999514345927
+                            position -1.3852790097298588
                             axis 0 0 1
                           }
                           device [
@@ -1158,12 +1159,12 @@ DEF ROBOT Supervisor {
                             }
                           ]
                           endPoint Solid {
-                            translation 1.2575506193088519e-23 3.4694499999772105e-18 0
-                            rotation 0 0 -1 1.5707999514345925
+                            translation -6.399573948513172e-19 3.40991757015842e-18 0
+                            rotation 0 0 -1 1.385279009729859
                             children [
                               DEF FLknee_HJ HingeJoint {
                                 jointParameters HingeJointParameters {
-                                  position -3.2105825207359234e-7
+                                  position 0.390948722070361
                                   axis 0 1 0
                                 }
                                 device [
@@ -1175,14 +1176,14 @@ DEF ROBOT Supervisor {
                                   }
                                 ]
                                 endPoint Solid {
-                                  rotation 0 -1 0 3.2098083538618743e-7
+                                  rotation 0 1 0 0.39094872207036085
                                   children [
                                     DEF FL_TOUCH_T Transform {
                                       translation 0.12 0 0
                                       children [
                                         DEF TS_FL TouchSensor {
-                                          translation -4.144608885009449e-6 -7.086611793771791e-7 1.520589036657638e-6
-                                          rotation 0.3269126601564052 0.25981588724000004 0.9086384414975817 -1.0767539956067815e-8
+                                          translation -5.553036551531054e-6 -2.10466388317343e-7 2.418520574920535e-6
+                                          rotation 0.42489600495030366 0.028996946779084046 0.9047776312745375 -1.8342586554650873e-8
                                           children [
                                             DEF TS_SHAPE Shape {
                                               appearance Appearance {
@@ -1207,8 +1208,8 @@ DEF ROBOT Supervisor {
                                           }
                                           type "force-3d"
                                           lookupTable []
-                                          linearVelocity 5.136071065114933e-6 2.4571308822537996e-6 -1.3143762274125947e-5
-                                          angularVelocity 2.598318623337849e-5 4.459061360289207e-5 7.690244925237505e-6
+                                          linearVelocity 0.4596627917653675 0.1281745818201615 0.08772656598210067
+                                          angularVelocity -0.6673047053996394 -1.484312477560935 0.8618205208191572
                                         }
                                       ]
                                     }
@@ -1248,8 +1249,8 @@ DEF ROBOT Supervisor {
                                       0.07 0 0
                                     ]
                                   }
-                                  linearVelocity 4.823599337278128e-6 2.4207570750257913e-6 -1.1993687560817382e-5
-                                  angularVelocity 2.5983115950175952e-5 4.459068048953915e-5 7.690060909016553e-6
+                                  linearVelocity 0.3797722247240793 0.1479787146624926 0.06000456292570684
+                                  angularVelocity -0.6673047053985982 -1.4843124775589704 0.8618205208177421
                                 }
                               }
                               DEF FrontLeftKneeMX Transform {
@@ -1276,8 +1277,8 @@ DEF ROBOT Supervisor {
                                 0 0 0
                               ]
                             }
-                            linearVelocity 4.393124249941713e-6 2.373979613292863e-6 -1.0384550394679749e-5
-                            angularVelocity 2.598303229381732e-5 4.459082360294712e-5 7.687980623628089e-6
+                            linearVelocity 0.2678962226944265 0.1757139862967413 0.021188404148710586
+                            angularVelocity 1.078603594482654 -0.7854335893669048 0.04426247434827861
                           }
                         }
                       ]
@@ -1324,8 +1325,8 @@ DEF ROBOT Supervisor {
                       0 0 -0.08
                     ]
                   }
-                  linearVelocity 7.289586153895551e-6 5.383449938216662e-7 -9.643051724329656e-6
-                  angularVelocity 2.598235539745174e-5 4.459097840117088e-5 7.686600443957352e-6
+                  linearVelocity 0.22282965300685345 0.11450754101707858 0.03329142556714916
+                  angularVelocity 1.2672543632638458 -0.8568328013090415 0.3863114043215593
                 }
               }
               DEF FrontLeftYawMX Transform {
@@ -1351,8 +1352,8 @@ DEF ROBOT Supervisor {
                 0 0 0
               ]
             }
-            linearVelocity 1.0730784599380993e-5 -1.6384890142092381e-6 -8.763469782082437e-6
-            angularVelocity 2.5980361113546562e-5 4.459274549826212e-5 7.684045221730965e-6
+            linearVelocity 0.16933782542031134 0.04185873576805924 0.04765696372482666
+            angularVelocity 1.2373450134594124 -0.37444266725166064 0.5031984487533133
           }
         }
       ]
@@ -1362,7 +1363,7 @@ DEF ROBOT Supervisor {
       children [
         DEF FRpitch_HJ HingeJoint {
           jointParameters HingeJointParameters {
-            position -2.7206393266602736e-6
+            position -0.06849109289662314
           }
           device [
             RotationalMotor {
@@ -1373,11 +1374,11 @@ DEF ROBOT Supervisor {
             }
           ]
           endPoint Solid {
-            rotation -1 0 0 2.720676193482419e-6
+            rotation -1 0 0 0.06849109289662629
             children [
               DEF FRyaw_HJ HingeJoint {
                 jointParameters HingeJointParameters {
-                  position 9.427999673735877e-7
+                  position -0.13406612525243006
                   axis 0 1 0
                 }
                 device [
@@ -1389,14 +1390,14 @@ DEF ROBOT Supervisor {
                   }
                 ]
                 endPoint Solid {
-                  rotation 0 0.9999999999999999 0 9.429032814238382e-7
+                  rotation 0 -0.9999999999999999 0 0.13406612525243103
                   children [
                     DEF FRroll_T Transform {
                       translation 0 0 0.1474
                       children [
                         DEF FRroll_HJ HingeJoint {
                           jointParameters HingeJointParameters {
-                            position -1.57079991096965
+                            position -1.2633323755520098
                             axis 0 0 1
                           }
                           device [
@@ -1408,12 +1409,12 @@ DEF ROBOT Supervisor {
                             }
                           ]
                           endPoint Solid {
-                            translation 1.2435115098689784e-23 3.469449999977715e-18 0
-                            rotation 0 0 -1 1.5707999109696502
+                            translation -1.050002999655265e-18 3.3067471937260253e-18 0
+                            rotation 0 0 -1 1.2633323755520098
                             children [
                               DEF FRknee_HJ HingeJoint {
                                 jointParameters HingeJointParameters {
-                                  position -1.4339915330476857e-9
+                                  position -0.07478338763432088
                                   axis 0 1 0
                                 }
                                 device [
@@ -1425,13 +1426,14 @@ DEF ROBOT Supervisor {
                                   }
                                 ]
                                 endPoint Solid {
+                                  rotation 0 -1 0 0.07478338763432102
                                   children [
                                     DEF FR_TOUCH_T Transform {
                                       translation 0.12 0 0
                                       children [
                                         DEF TS_FR TouchSensor {
-                                          translation -7.4901196014387494e-6 4.942816103081782e-7 -6.444230086777303e-7
-                                          rotation 0.07671374682322489 -0.2933835682026491 -0.9529118967444072 2.5228959173546536e-8
+                                          translation -1.8498855102300205e-5 4.046932936319081e-6 1.2498576371644532e-6
+                                          rotation 0.11286046733440526 -0.8561660184457286 -0.5042244180638699 3.7420478222185054e-8
                                           children [
                                             DEF TS_SHAPE Shape {
                                               appearance Appearance {
@@ -1456,8 +1458,8 @@ DEF ROBOT Supervisor {
                                           }
                                           type "force-3d"
                                           lookupTable []
-                                          linearVelocity 2.601450640771219e-5 -1.0533141158015902e-5 -7.908032467751624e-6
-                                          angularVelocity 2.623136782054255e-5 4.817182204225603e-5 7.811210204890072e-6
+                                          linearVelocity -0.002716699055457697 0.0023947605588315463 -0.020735812442882536
+                                          angularVelocity 0.2458657837981842 -0.6936714807233553 0.11017083591572129
                                         }
                                       ]
                                     }
@@ -1497,8 +1499,8 @@ DEF ROBOT Supervisor {
                                       0.07 0 0
                                     ]
                                   }
-                                  linearVelocity 2.5743160509031953e-5 -1.0555912242173934e-5 -6.734756175978526e-6
-                                  angularVelocity 2.6231084728151534e-5 4.817194959045141e-5 7.811433214986088e-6
+                                  linearVelocity 0.00034800963219103697 0.004050851567769328 -0.01711302190221316
+                                  angularVelocity 0.24586578499064649 -0.6936714950315114 0.11017088064804478
                                 }
                               }
                               DEF FrontRightKneeMX Transform {
@@ -1525,8 +1527,8 @@ DEF ROBOT Supervisor {
                                 0 0 0
                               ]
                             }
-                            linearVelocity 2.535416413602899e-5 -1.0589075917959046e-5 -5.102296201449943e-6
-                            angularVelocity 2.622646443605865e-5 4.817227303543282e-5 7.813988368761762e-6
+                            linearVelocity 0.004638339085472533 0.0063720112065011655 -0.012037438773533117
+                            angularVelocity 0.10998176140009251 -0.7406600447380063 0.055147654765814805
                           }
                         }
                       ]
@@ -1573,8 +1575,8 @@ DEF ROBOT Supervisor {
                       0 0 0.08
                     ]
                   }
-                  linearVelocity 2.2229569527741184e-5 -8.742662087634577e-6 -5.877427702551832e-6
-                  angularVelocity 2.6222898537116992e-5 4.817247742318781e-5 7.817772459291122e-6
+                  linearVelocity 0.050705285024733975 0.01463058314694813 0.007080717903653286
+                  angularVelocity 0.04977018849998366 -0.731908373623386 0.19641190493220972
                 }
               }
               DEF FrontRightYawMX Transform {
@@ -1600,8 +1602,8 @@ DEF ROBOT Supervisor {
                 0 0 0
               ]
             }
-            linearVelocity 1.8516631081966206e-5 -6.551678602177006e-6 -6.8022346452236735e-6
-            angularVelocity 2.5980409174006484e-5 4.459101600809055e-5 7.678176299742898e-6
+            linearVelocity 0.10538303279910655 0.02443370974337356 0.02977312269680683
+            angularVelocity 0.05690448918990105 -0.36872046826977894 0.17695463106571746
           }
         }
       ]
@@ -1631,8 +1633,8 @@ DEF ROBOT Supervisor {
   }
   controller "RosRobotControllerSim"
   controllerArgs "--name=krock --clock"
-  linearVelocity 1.5201142855152824e-5 -4.062455463122573e-6 -9.922771795221861e-6
-  angularVelocity 2.597262642528491e-5 4.459573003527993e-5 7.679982656350777e-6
+  linearVelocity 0.13269126889999774 0.04059745171533502 0.055746784823753524
+  angularVelocity 0.05142013536594421 -0.3686942492458054 0.17543741227347265
 }
 DEF TERRAIN Solid {
   translation -5 0 -5

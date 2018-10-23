@@ -36,7 +36,7 @@
 //#include <sensor_msgs/image_encodings.h>
 
 
-#define TIME_STEP   10    //ms
+#define TIME_STEP   4    //ms
 #define FREQUENCY   0.3   //Hz
 #define NUM_MOTORS   18
 
@@ -160,8 +160,12 @@ bool RosKrock::selectGait(int new_gait_idx){
     if (new_gait_idx >=0 && new_gait_idx <=3){
         if (new_gait_idx != current_gait_idx){
             ROS_INFO ("Changing gait to: %s", gait_files[new_gait_idx]);
+            GaitControl * tmp_ptr;
+            tmp_ptr = controller;
             controller = new GaitControl(FREQUENCY, gait_files[new_gait_idx]);
+            delete tmp_ptr;
             current_gait_idx = new_gait_idx;
+            controller->setTimeStep(dt);
         }
         else{
             ROS_INFO ("Selected gait is the same as current!");
@@ -265,7 +269,7 @@ void RosKrock::messageManualControlCallback(const webots_ros::Float64ArrayStampe
     /*Do we really need the Stamp? Left for future uses.*/
     std::vector<double> inputs (msg->data);
     if (inputs.size() == 4){
-        ROS_INFO("Manually setting control inputs (mode, gait, frontal freq, lateral freq ):");
+        //ROS_INFO("Manually setting control inputs (mode, gait, frontal freq, lateral freq ):");
         controller_mode = int(inputs[0]) %2 ;
         int new_gait_idx = int(inputs[1]) % 4;
         selectGait(new_gait_idx);
@@ -278,7 +282,7 @@ void RosKrock::messageManualControlCallback(const webots_ros::Float64ArrayStampe
         freq_left = (freq_offset * fl) - (freq_offset * ff);
         freq_right = (freq_offset * fl) + (freq_offset * ff);
 
-        ROS_INFO("Control inputs (%d, %d, %f, %f). Frequency of table reading for legs L %f R %f.", controller_mode, new_gait_idx, ff, fl, freq_left, freq_right);
+        //ROS_INFO("Control inputs (%d, %d, %f, %f). Frequency of table reading for legs L %f R %f.", controller_mode, new_gait_idx, ff, fl, freq_left, freq_right);
     }
     else{
         ROS_INFO("WARNING: 4 values expected, ignoring control commands.");
@@ -295,6 +299,9 @@ void RosKrock::setupRobot(){
     }
     cout<<"RobotSIM CREATED"<<endl;
     controller = new GaitControl(FREQUENCY, gait_files[current_gait_idx]);
+    controller->setTimeStep(dt);
+
+    //last_step_t = ros::Time::now();
 }
 
 void RosKrock::setRosDevices(const char **hiddenDevices, int numberHiddenDevices){
@@ -346,16 +353,17 @@ void RosKrock::launchRos(int argc, char **argv){
 
 int RosKrock::step(int duration){
     //ROS_INFO ("Running step func with duration %d", duration);
+    //ROS_INFO ("Lapsed time since last -step-: %s", step_dt);
 
     // controller calls
     switch(controller_mode){
         case 0: // auto
-            controller->setTimeStep(dt);
+            //controller->setTimeStep(dt);
             controller->runStep();
             controller->getAngles(angref);
             break;
-        case 1: // keyboard
-            controller->setTimeStep(dt);
+        case 1: // manual
+            //controller->setTimeStep(dt);
             controller->runStep(freq_left, freq_right);
             controller->getAnglesManual(angref);
             break;
@@ -426,7 +434,7 @@ int RosKrock::step(int duration){
 
     // NOTE: This is the way to extract pose information from webots API (compared with way above)
 
-    /*SUPERVISOR_NEEDED?*/
+    // SUPERVISOR_NEEDED?
     // We obtain the current pose of the robot using the supervisor functions of the
     // native controller
     Node *node_robot = robotSim()->getFromDef("ROBOT");
@@ -435,7 +443,6 @@ int RosKrock::step(int duration){
     webots_ros::Float64ArrayStamped torques_krock;
     webots_ros::Float64ArrayStamped touch_sensors_krock;
     webots_ros::Float64ArrayStamped imu_krock;
-
 
     if (node_robot){
         // Populating pose message
@@ -491,6 +498,7 @@ int RosKrock::step(int duration){
     t+=dt;
 
     return robotSim()->step(TIME_STEP);
+
 }
 
 

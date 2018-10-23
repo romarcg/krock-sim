@@ -80,6 +80,7 @@ RobotSim :: RobotSim(int TIME_STEP)
     tsdefHR=getFromDef("TS_HR");
 
     // Enable Camera
+    cout << "setting camera" << endl;
     camera = new webots::Camera("front_camera");
     camera->enable(TIME_STEP);
 
