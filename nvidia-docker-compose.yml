@@ -21,9 +21,9 @@ services:
     - /etc/passwd:/etc/passwd:ro
     - /etc/shadow:/etc/shadow:ro
     - /tmp/.X11-unix:/tmp/.X11-unix:rw
-    - nvidia_driver_390.87:/usr/local/nvidia:ro
+    - nvidia_driver_410.73:/usr/local/nvidia:ro
 version: '3'
 volumes:
-  nvidia_driver_390.87:
+  nvidia_driver_410.73:
     external: true
   tmp: null
